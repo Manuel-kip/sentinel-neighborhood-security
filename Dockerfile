@@ -1,6 +1,7 @@
 FROM php:8.3-apache
-RUN docker-php-ext-install pdo_mysql mbstring
+RUN docker-php-ext-install pdo_mysql mbstring && a2dismod mpm_event mpm_worker || true
+RUN a2enmod mpm_prefork rewrite headers
 COPY public/ /var/www/html/
 COPY database/ /var/www/database/
-RUN a2enmod rewrite headers
 EXPOSE 80
+CMD ["apache2-foreground"]
